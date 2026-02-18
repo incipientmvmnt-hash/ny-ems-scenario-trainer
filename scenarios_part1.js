@@ -350,15 +350,15 @@ const SCENARIOS_P1 = [
     questions: [
       {
         phase: "scene",
-        prompt: "The patient has diminished air movement with minimal wheezing on auscultation. What does this finding indicate?",
-        multi_select: false,
+        prompt: "The patient has diminished air movement with minimal wheezing on auscultation. What does this finding indicate, and what is your initial action? (Select all that apply)",
+        multi_select: true,
         level_filter: "CFR-EMT-AEMT-CC-P",
         narrative: "On your initial assessment, you note severe retractions and accessory muscle use but hear very little wheezing when you auscultate the chest.",
         clinical_pearl: "A 'quiet chest' in a known asthmatic is an ominous sign. It indicates such severe bronchospasm that there is insufficient air movement to generate wheezing. This patient is approaching respiratory failure.",
         options: [
           { text: "Critically severe bronchospasm with air trapping — the absence of wheezing indicates insufficient air movement and impending failure", correct: true, critical: false, explanation: "Diminished breath sounds with minimal wheezing in a severe asthmatic indicates near-complete airway obstruction. This is worse than loud wheezing.", protocol_ref: "als_dif_breathing_adult_asthma_copd_wheezing_for_pediatric_see_dif_breathing_pediatr" },
           { text: "Improvement in bronchospasm since the wheezing has decreased, suggesting the patient's inhaler provided partial relief", correct: false, critical: true, explanation: "Decreasing wheezing with worsening clinical appearance is NOT improvement. It indicates worsening obstruction with inadequate air movement.", protocol_ref: "als_dif_breathing_adult_asthma_copd_wheezing_for_pediatric_see_dif_breathing_pediatr" },
-          { text: "Possible pneumothorax from air trapping causing lung collapse, which requires immediate needle decompression", correct: false, critical: false, explanation: "While pneumothorax is a complication of severe asthma, bilateral diminished sounds with retractions is more consistent with severe bronchospasm. Needle decompression without confirmation is inappropriate.", protocol_ref: "als_dif_breathing_adult_asthma_copd_wheezing_for_pediatric_see_dif_breathing_pediatr" },
+          { text: "Administer supplemental oxygen immediately and assess for the need for respiratory failure interventions per protocol", correct: true, critical: false, explanation: "Per NY protocol, ongoing assessment of breathing effectiveness is required, with escalation to respiratory arrest/failure protocol if necessary. Immediate oxygen is indicated.", protocol_ref: "als_dif_breathing_adult_asthma_copd_wheezing_for_pediatric_see_dif_breathing_pediatr" },
           { text: "Anxiety-related hyperventilation that is mimicking asthma symptoms, given the patient's young age and college setting", correct: false, critical: true, explanation: "Attributing this to anxiety in a patient with known severe asthma, prior intubations, SpO₂ of 87%, and accessory muscle use is dangerous and could lead to death.", protocol_ref: "als_dif_breathing_adult_asthma_copd_wheezing_for_pediatric_see_dif_breathing_pediatr" }
         ]
       },
@@ -464,14 +464,14 @@ const SCENARIOS_P1 = [
     questions: [
       {
         phase: "scene",
-        prompt: "What is the immediate life-threatening priority that must be addressed first?",
-        multi_select: false,
+        prompt: "What are the immediate life-threatening priorities that must be addressed? (Select all that apply)",
+        multi_select: true,
         level_filter: "CFR-EMT-AEMT-CC-P",
         narrative: "You approach the patient and see active arterial bleeding from the left thigh wound. A large blood pool has formed on the pavement.",
         clinical_pearl: "In trauma, 'C-A-B' prioritization applies when there is massive hemorrhage. Control life-threatening bleeding before addressing airway and breathing per the hemorrhage control protocol.",
         options: [
           { text: "Apply direct pressure to the wound and prepare to place a tourniquet 2-3 inches proximal to the open femur wound", correct: true, critical: false, explanation: "Per NY protocol, immediate intervention for severe bleeding is direct pressure, followed by tourniquet placement for uncontrollable extremity bleeding.", protocol_ref: "als_bleeding_hemorrhage_control" },
-          { text: "Establish manual in-line cervical stabilization first given the high-speed motorcycle mechanism of injury", correct: false, critical: false, explanation: "While spinal precautions are important, massive hemorrhage is the immediate life threat. Bleeding control takes priority over spinal immobilization.", protocol_ref: "als_bleeding_hemorrhage_control" },
+          { text: "Assess and manage the airway while providing supplemental oxygen therapy per the oxygen administration protocol", correct: true, critical: false, explanation: "Per NY protocol, ABCs and airway management with appropriate oxygen therapy are indicated at all provider levels alongside hemorrhage control.", protocol_ref: "als_oxygen_administration_and_airway_management" },
           { text: "Perform a rapid full-body trauma assessment before initiating any specific treatment interventions on scene", correct: false, critical: true, explanation: "With active arterial bleeding and signs of hemorrhagic shock, delaying hemorrhage control for a full assessment could result in exsanguination.", protocol_ref: "als_bleeding_hemorrhage_control" },
           { text: "Start two large-bore IVs with normal saline running wide open to replace the volume already lost from bleeding", correct: false, critical: false, explanation: "Fluid resuscitation without hemorrhage control is futile. 'You cannot fill a bucket with a hole in it.' Stop the bleeding first.", protocol_ref: "als_bleeding_hemorrhage_control" }
         ]

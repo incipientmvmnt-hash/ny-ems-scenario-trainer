@@ -63,7 +63,7 @@ h1{font-size:1.6em;text-align:center;margin:20px 0 4px}
 .option.incorrect .indicator{background:#d9534f}
 .option.missed .indicator{background:#f0ad4e}
 .explanation{font-size:.85em;color:#8b92a8;margin-top:8px;padding:10px;background:#0d1020;border-radius:8px;line-height:1.5}
-.explanation .ref{color:#4a9eff;font-weight:500}
+.explanation .ref{color:#4a9eff;font-weight:500;display:block;margin-top:4px;word-break:break-word;font-size:.8em}
 .question-prompt{font-size:1em;font-weight:500;margin-bottom:12px;line-height:1.5}
 .multi-hint{font-size:.8em;color:#8b92a8;margin-bottom:8px}
 .score-circle{width:120px;height:120px;border-radius:50%;margin:20px auto;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2em;font-weight:700}
@@ -1524,6 +1524,19 @@ let state = {
 
 const app = document.getElementById('app');
 
+function cleanProtocolRef(ref) {
+  if (!ref) return '';
+  // Remove als_/bls_ prefix
+  let s = ref.replace(/^(als|bls)_/, '');
+  // Remove _for_pediatric_see... and similar cross-ref suffixes
+  s = s.replace(/_for_pediatric.*$/, '').replace(/_adult_for.*$/, '').replace(/_undifferentiated.*$/, '');
+  // Replace underscores with spaces, title case
+  s = s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  // Fix common terms
+  s = s.replace('Andor', '&').replace('Dif ', 'Difficulty ').replace('Copd', 'COPD');
+  return s;
+}
+
 function render() {
   switch(state.screen) {
     case 'home': renderHome(); break;
@@ -1769,13 +1782,13 @@ function renderScenario() {
     if (state.answered) {
       if (opt.correct) {
         cls += ' correct';
-        extra = `<div class="explanation"><span class="indicator"></span> ✅ ${opt.explanation} <span class="ref">(${opt.protocol_ref})</span></div>`;
+        extra = `<div class="explanation"><span class="indicator"></span> ✅ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
       } else if (state.selectedOptions.has(i)) {
         cls += ' incorrect';
         if (opt.critical) {
-          extra = `<div class="critical-error"><div class="critical-title">⛔ CRITICAL ERROR — This action could cause patient harm</div>${opt.explanation} <span class="ref" style="color:#ffcdd2">(${opt.protocol_ref})</span></div>`;
+          extra = `<div class="critical-error"><div class="critical-title">⛔ CRITICAL ERROR — This action could cause patient harm</div>${opt.explanation} <span class="ref" style="color:#ffcdd2">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
         } else {
-          extra = `<div class="explanation"><span class="indicator"></span> ❌ ${opt.explanation} <span class="ref">(${opt.protocol_ref})</span></div>`;
+          extra = `<div class="explanation"><span class="indicator"></span> ❌ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
         }
       }
     } else {
@@ -1916,7 +1929,7 @@ function renderDebrief() {
         <div class="your-ans ${a.correct ? '' : 'wrong'}">Your answer: ${a.selected.join(', ')}</div>
         ${a.criticalFail ? '<div style="color:#ff5252;font-size:.8em;font-weight:600">⛔ CRITICAL ERROR</div>' : ''}
         ${!a.correct ? `<div class="correct-ans">Correct: ${a.correctAnswer.join(', ')}</div>` : ''}
-        <div style="margin-top:4px"><span class="tag tag-proto">${a.protocol}</span></div>
+        <div style="margin-top:4px"><span class="tag tag-proto">${cleanProtocolRef(a.protocol)}</span></div>
       </div>`;
   });
 
