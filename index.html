@@ -1548,32 +1548,61 @@ function render() {
 }
 
 function renderHome() {
+  const scenarioCount = SCENARIOS.length;
   app.innerHTML = `
-    <h1>🚑 NY EMS Scenario Trainer</h1>
-    <p class="subtitle">Train with real New York State protocols</p>
-    <p style="text-align:center;color:#8b92a8;font-size:.85em;margin-bottom:24px">Select your certification level</p>
-    <div class="level-cards">
-      <div class="card level-card" data-level="CFR" onclick="selectLevel('CFR')">
-        CFR
-        <div class="desc">Certified First Responder</div>
+    <div style="text-align:center;padding:30px 0 20px">
+      <div style="font-size:3em;margin-bottom:8px">🚑</div>
+      <h1 style="font-size:1.8em;margin:0 0 6px;background:linear-gradient(135deg,#fff,#8b92a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NY EMS Scenario Trainer</h1>
+      <p style="color:#8b92a8;font-size:.9em;margin:0">New York State Collaborative Protocols · v25.1</p>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:16px;margin:20px 0 28px">
+      <div style="text-align:center">
+        <div style="font-size:1.6em;font-weight:700;color:#d9534f">${scenarioCount}</div>
+        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Scenarios</div>
       </div>
-      <div class="card level-card" data-level="EMT" onclick="selectLevel('EMT')">
-        EMT
-        <div class="desc">Emergency Medical Technician</div>
+      <div style="width:1px;background:#1e2440"></div>
+      <div style="text-align:center">
+        <div style="font-size:1.6em;font-weight:700;color:#4a9eff">5</div>
+        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Provider Levels</div>
       </div>
-      <div class="card level-card" data-level="AEMT" onclick="selectLevel('AEMT')">
-        AEMT
-        <div class="desc">Advanced EMT</div>
-      </div>
-      <div class="card level-card" data-level="CC" onclick="selectLevel('CC')">
-        EMT-CC
-        <div class="desc">Critical Care</div>
-      </div>
-      <div class="card level-card" data-level="P" onclick="selectLevel('P')">
-        Paramedic
-        <div class="desc">Paramedic</div>
+      <div style="width:1px;background:#1e2440"></div>
+      <div style="text-align:center">
+        <div style="font-size:1.6em;font-weight:700;color:#34c759">4</div>
+        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Categories</div>
       </div>
     </div>
+
+    <div style="background:#141929;border-radius:16px;padding:20px;margin-bottom:24px">
+      <p style="color:#8b92a8;font-size:.8em;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;font-weight:600">Select Your Certification Level</p>
+      
+      <div class="card level-card" data-level="CFR" onclick="selectLevel('CFR')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(160,160,160,.15);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0">🔰</div>
+        <div><div style="font-weight:600;font-size:1em">CFR</div><div class="desc" style="margin-top:2px">Certified First Responder</div></div>
+      </div>
+
+      <div class="card level-card" data-level="EMT" onclick="selectLevel('EMT')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(240,173,78,.15);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0">⭐</div>
+        <div><div style="font-weight:600;font-size:1em">EMT</div><div class="desc" style="margin-top:2px">Emergency Medical Technician</div></div>
+      </div>
+
+      <div class="card level-card" data-level="AEMT" onclick="selectLevel('AEMT')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(52,199,89,.15);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0">💉</div>
+        <div><div style="font-weight:600;font-size:1em">AEMT</div><div class="desc" style="margin-top:2px">Advanced EMT</div></div>
+      </div>
+
+      <div class="card level-card" data-level="P" onclick="selectLevel('P')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(217,83,79,.15);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0">🏥</div>
+        <div><div style="font-weight:600;font-size:1em">Paramedic</div><div class="desc" style="margin-top:2px">Paramedic</div></div>
+      </div>
+
+      <div class="card level-card" data-level="CC" onclick="selectLevel('CC')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:0">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(74,158,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0">🔬</div>
+        <div><div style="font-weight:600;font-size:1em">EMT-CC</div><div class="desc" style="margin-top:2px">Critical Care Paramedic</div></div>
+      </div>
+    </div>
+
+    <p style="text-align:center;color:#555;font-size:.75em;margin-top:16px">Scenarios based on NY Collaborative Protocols v25.1<br>For training purposes only — not a substitute for protocol review</p>
   `;
 }
 
@@ -1584,7 +1613,7 @@ function selectLevel(level) {
 }
 
 function getAvailableScenarios() {
-  const levelOrder = {CFR:1, EMT:2, AEMT:3, CC:4, P:5};
+  const levelOrder = {CFR:1, EMT:2, AEMT:3, P:4, CC:5};
   const userLevel = levelOrder[state.level] || 1;
   return SCENARIOS.filter(s => {
     const minLevel = levelOrder[s.level_min] || 1;
