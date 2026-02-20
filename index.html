@@ -1809,7 +1809,7 @@ const SCENARIOS = [
         prompt: "The cardiac monitor confirms a narrow complex, regular tachycardia at 188 bpm with no discernible P waves. At the AEMT level, what intervention should be considered while awaiting CC/Paramedic level care?",
         multi_select: false,
         level_filter: "AEMT-CC-P",
-        narrative: "ALS is en route but 8 minutes away. You have IV supplies and the patient is cooperative.",
+        narrative: "You have IV supplies and the patient is cooperative.",
         clinical_pearl: "NY Narrow Complex Tachycardia protocol directs AEMTs to establish vascular access and consider normal saline if tachycardia may be due to dehydration/hypovolemia. However, this patient's sudden onset without an obvious trigger makes dehydration unlikely — SVT is the probable diagnosis.",
         options: [
           { text: "Establish vascular access and consider normal saline only if there is concern for dehydration or hypovolemia as a cause", correct: true, critical: false, explanation: "Per NY protocol at the AEMT level: vascular access and consider NS 500 mL bolus if tachycardia may be due to dehydration/hypovolemia. IV access also prepares for adenosine administration.", protocol_ref: "als_cardiac_related_problem_chest_pain_adult_for_pediatric_see_cardiac_related_probl" },
@@ -2038,10 +2038,10 @@ const SCENARIOS = [
       },
       {
         phase: "treatment",
-        prompt: "ALS arrives on scene. At the AEMT/CC/Paramedic level, what is the appropriate treatment for this patient's blood glucose of 28 mg/dL?",
+        prompt: "You have established IV access. At the AEMT/CC/Paramedic level, what is the appropriate treatment for this patient's blood glucose of 28 mg/dL?",
         multi_select: false,
         level_filter: "AEMT-CC-P",
-        narrative: "ALS has arrived and established IV access. The patient remains confused with GCS 10 and BG 28 mg/dL.",
+        narrative: "You have established IV access. The patient remains confused with GCS 10 and BG 28 mg/dL.",
         options: [
           { text: "Administer dextrose 10% up to 25 grams (250 mL) IV, which may be redosed once if hypoglycemia recurs after treatment", correct: true, critical: false, explanation: "Per NY Hypoglycemia protocol for ALS: administer Dextrose 10% up to 25 grams (250 mL) IV if glucose <60 and patient cannot swallow. May redose once if hypoglycemia recurs.", protocol_ref: "als_hypoglycemia_adult_for_pediatric_see_hypoglycemia_pediatric" },
           { text: "Administer dextrose 50% one amp (25 grams) IV push as a single rapid bolus to correct the hypoglycemia quickly", correct: false, critical: false, explanation: "NY protocol specifies Dextrose 10%, not D50. D10 is the current standard as it is less caustic to veins and allows better titration.", protocol_ref: "als_hypoglycemia_adult_for_pediatric_see_hypoglycemia_pediatric" },
@@ -2162,10 +2162,10 @@ const SCENARIOS = [
       },
       {
         phase: "treatment",
-        prompt: "At the ALS level, what are the priority interventions for this patient showing signs of hypovolemic shock? (Select all that apply)",
+        prompt: "What are the priority interventions for this patient showing signs of hypovolemic shock? (Select all that apply)",
         multi_select: true,
         level_filter: "AEMT-CC-P",
-        narrative: "You have called for ALS backup. The patient is becoming increasingly diaphoretic and restless. She reports shoulder pain in addition to the abdominal pain.",
+        narrative: "The patient is becoming increasingly diaphoretic and restless. She reports shoulder pain in addition to the abdominal pain.",
         vitals_update: { hr: 132, bp: "82/50", rr: 26, spo2: 96 },
         clinical_pearl: "Shoulder pain (Kehr's sign) in the setting of abdominal pain and shock indicates diaphragmatic irritation from free intraperitoneal blood — a classic finding in ruptured ectopic pregnancy. This confirms the diagnosis clinically.",
         options: [
@@ -2883,7 +2883,7 @@ const SCENARIOS = [
         prompt: "What are the appropriate EMT-level treatment priorities for this severely hypothermic patient? (Select all that apply)",
         multi_select: true,
         level_filter: "EMT-AEMT-CC-P",
-        narrative: "The patient has a pulse but is severely hypothermic. You need to begin treatment while awaiting ALS backup.",
+        narrative: "The patient has a pulse but is severely hypothermic. You need to begin treatment.",
         clinical_pearl: "Gentle handling is critical in severe hypothermia. Rough movement can precipitate ventricular fibrillation in an irritable myocardium. The patient must be kept horizontal and movement minimized.",
         options: [
           { text: "Minimize all movement, maintain the patient horizontal, and handle extremely gently during all interventions", correct: true, critical: false, explanation: "Per NY protocol for moderate and severe hypothermia: minimize movement during extrication (NO standing or walking) and maintain horizontal position. Rough handling can trigger VF.", protocol_ref: "als_environmental_hypothermia" },
@@ -2894,10 +2894,10 @@ const SCENARIOS = [
       },
       {
         phase: "treatment",
-        prompt: "ALS arrives. At the CC/Paramedic level, what is the correct approach to defibrillation and medication administration in this severely hypothermic patient?",
+        prompt: "At the CC/Paramedic level, what is the correct approach to defibrillation and medication administration in this severely hypothermic patient?",
         multi_select: false,
         level_filter: "CC-P",
-        narrative: "ALS has arrived. The patient remains bradycardic at 34 bpm with J-waves. He has not gone into cardiac arrest but the rhythm is tenuous. The crew discusses contingency plans.",
+        narrative: "The patient remains bradycardic at 34 bpm with J-waves. He has not gone into cardiac arrest but the rhythm is tenuous.",
         clinical_pearl: "In severe hypothermia, the myocardium is resistant to defibrillation and medications. NY protocol limits both to one attempt/dose to avoid compounding toxicity as drugs won't metabolize normally in a cold body.",
         options: [
           { text: "Limit defibrillation to one shock if indicated and limit indicated medications to one dose per protocol", correct: true, critical: false, explanation: "Per NY CC/Paramedic hypothermia protocol: limit manual defibrillation to one shock if indicated and limit indicated medications to one dose. Hypothermic myocardium is resistant to repeated interventions.", protocol_ref: "als_environmental_hypothermia" },
@@ -3187,7 +3187,7 @@ const SCENARIOS = [
         prompt: "At the CC level, what additional medication is indicated for this patient?",
         multi_select: false,
         level_filter: "CC-P",
-        narrative: "ALS has arrived. The child has received two doses of IM epinephrine and one albuterol nebulizer. Stridor is improving but urticaria persists. BP is now 86/52.",
+        narrative: "The child has received two doses of IM epinephrine and one albuterol nebulizer. Stridor is improving but urticaria persists. BP is now 86/52.",
         vitals_update: { hr: 132, bp: "86/52", rr: 28, spo2: 93, gcs: 15 },
         clinical_pearl: "Diphenhydramine at the CC level is dosed at 1 mg/kg IM (max 50 mg) for pediatric anaphylaxis. At the Paramedic level, it can also be given IV and additional interventions include NS 20 mL/kg bolus and dexamethasone.",
         options: [

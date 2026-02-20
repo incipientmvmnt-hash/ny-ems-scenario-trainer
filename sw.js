@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ems-trainer-v10';
+const CACHE_NAME = 'ems-trainer-v11';
 const ASSETS = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
