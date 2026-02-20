@@ -110,6 +110,43 @@ h1{font-size:1.6em;text-align:center;margin:20px 0 4px}
 .score-tier.tier-developing{background:rgba(255,152,0,.15);color:#ff9800;border:2px solid #ff9800}
 .score-tier.tier-novice{background:rgba(217,83,79,.15);color:#d9534f;border:2px solid #d9534f}
 .critical-fails-warning{background:rgba(183,28,28,.2);border:2px solid #b71c1c;border-radius:12px;padding:14px;margin:12px 0;text-align:center;color:#ff5252;font-weight:600}
+
+/* Order (drag-reorder) */
+.order-list{display:flex;flex-direction:column;gap:8px}
+.order-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(20,25,41,.3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 16px rgba(0,0,0,.2)}
+.order-item .arrows{display:flex;flex-direction:column;gap:2px}
+.order-item .arrows button{width:40px;height:34px;border:none;background:rgba(255,255,255,.1);color:#fff;border-radius:6px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.order-item .arrows button:active{background:rgba(74,158,255,.3)}
+.order-item .order-text{flex:1;font-size:.95rem;line-height:1.4}
+.order-item.correct-show{background:rgba(52,199,89,.15);border-color:rgba(52,199,89,.4)}
+.order-item.wrong-show{background:rgba(217,83,79,.15);border-color:rgba(217,83,79,.4)}
+
+/* Categorize */
+.cat-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.cat-chip{padding:10px 16px;border-radius:10px;background:rgba(20,25,41,.3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:.9rem;transition:all .15s;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+.cat-chip:active,.cat-chip.picked{background:rgba(74,158,255,.25);border-color:rgba(74,158,255,.4)}
+.cat-chip.placed{opacity:.4;cursor:default}
+.cat-buckets{display:flex;gap:10px;flex-wrap:wrap}
+.cat-bucket{flex:1;min-width:140px;min-height:80px;border-radius:12px;padding:12px;background:rgba(20,25,41,.2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:2px dashed rgba(255,255,255,.15);transition:all .15s;cursor:pointer}
+.cat-bucket.highlight{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08)}
+.cat-bucket-title{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.cat-bucket-items{display:flex;flex-wrap:wrap;gap:6px}
+.cat-bucket-items .placed-chip{padding:6px 12px;border-radius:8px;background:rgba(74,158,255,.2);font-size:.85rem;cursor:pointer}
+
+/* Table / matrix */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+.q-table{width:100%;min-width:320px;border-collapse:separate;border-spacing:0;overflow:hidden;border-radius:12px;border:1px solid rgba(255,255,255,.1)}
+.q-table th,.q-table td{padding:10px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.q-table th{background:rgba(255,255,255,.08);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.6);white-space:nowrap}
+.q-table td{font-size:.82rem;line-height:1.3}
+.q-table td:first-child{text-align:left;font-weight:500;min-width:100px;max-width:160px}
+.q-table .cell-btn{width:40px;height:40px;border-radius:8px;border:2px solid rgba(255,255,255,.2);background:transparent;color:#fff;cursor:pointer;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
+.cell-btn.on{background:rgba(74,158,255,.3);border-color:#4a9eff}
+.cell-btn.correct-show{background:rgba(52,199,89,.3);border-color:#34c759}
+.cell-btn.wrong-show{background:rgba(217,83,79,.3);border-color:#d9534f}
+
+/* Select count hint */
+.select-count-hint{font-size:.8em;color:#8b92a8;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -3457,6 +3494,7 @@ function startScenario(id) {
   state.answers = [];
   state.answered = false;
   state.selectedOptions = new Set();
+  state.userState = {};
   state.screen = 'scenario';
   render();
 }
@@ -3577,46 +3615,75 @@ function renderScenario() {
     <div class="question-prompt">Question ${state.questionIndex + 1} of ${questions.length}: ${q.prompt}</div>
   `;
 
-  if (q.multi_select) {
-    html += `<div class="multi-hint">Select all that apply</div>`;
-  }
+  // Determine question type
+  const qType = q.type || (q.multi_select ? 'mr' : 'mc');
 
-  // Shuffle options (seeded per question to stay stable on re-render)
-  if (!q._shuffled) {
-    for (let j = q.options.length - 1; j > 0; j--) {
-      const k = Math.floor(Math.random() * (j + 1));
-      [q.options[j], q.options[k]] = [q.options[k], q.options[j]];
-    }
-    q._shuffled = true;
-  }
-
-  // Options
-  q.options.forEach((opt, i) => {
-    let cls = 'option';
-    let extra = '';
-    
-    if (state.answered) {
-      if (opt.correct) {
-        cls += ' correct';
-        extra = `<div class="explanation"><span class="indicator"></span> ✅ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
-      } else if (state.selectedOptions.has(i)) {
-        cls += ' incorrect';
-        if (opt.critical) {
-          extra = `<div class="critical-error"><div class="critical-title">⚠️ Important Safety Consideration</div>${opt.explanation} <span class="ref" style="color:#ffcc80">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
-        } else {
-          extra = `<div class="explanation"><span class="indicator"></span> ❌ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
-        }
-      }
+  // Initialize userState for this question if not yet done
+  if (!state.userState) state.userState = {};
+  if (!state.userState._inited) {
+    if (qType === 'order') {
+      state.userState = { _inited: true, order: q.items.map((_,i) => i) };
+    } else if (qType === 'categorize') {
+      state.userState = { _inited: true, assignments: q.items.map(() => -1), pickedItem: -1 };
+    } else if (qType === 'table') {
+      state.userState = { _inited: true, cells: q.rows.map(() => q.columns.map(() => 0)) };
     } else {
-      if (state.selectedOptions.has(i)) cls += ' selected';
+      state.userState = { _inited: true };
+    }
+  }
+
+  if (qType === 'mc' || qType === 'graphical' || qType === 'mr') {
+    // Existing MC/MR/Graphical rendering
+    if (qType === 'mr' || q.multi_select) {
+      const hint = q.selectCount ? `Select ${q.selectCount} that apply` : 'Select all that apply';
+      html += `<div class="multi-hint">${hint}</div>`;
     }
 
-    html += `
-      <div class="${cls}" onclick="selectOption(${i})">
-        ${opt.text}
-        ${extra}
-      </div>`;
-  });
+    // Shuffle options (seeded per question to stay stable on re-render)
+    if (!q._shuffled && q.options) {
+      for (let j = q.options.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [q.options[j], q.options[k]] = [q.options[k], q.options[j]];
+      }
+      q._shuffled = true;
+    }
+
+    // Options
+    if (q.options) {
+      q.options.forEach((opt, i) => {
+        let cls = 'option';
+        let extra = '';
+        
+        if (state.answered) {
+          if (opt.correct) {
+            cls += ' correct';
+            extra = `<div class="explanation"><span class="indicator"></span> ✅ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
+          } else if (state.selectedOptions.has(i)) {
+            cls += ' incorrect';
+            if (opt.critical) {
+              extra = `<div class="critical-error"><div class="critical-title">⚠️ Important Safety Consideration</div>${opt.explanation} <span class="ref" style="color:#ffcc80">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
+            } else {
+              extra = `<div class="explanation"><span class="indicator"></span> ❌ ${opt.explanation} <span class="ref">(${cleanProtocolRef(opt.protocol_ref)})</span></div>`;
+            }
+          }
+        } else {
+          if (state.selectedOptions.has(i)) cls += ' selected';
+        }
+
+        html += `
+          <div class="${cls}" onclick="selectOption(${i})">
+            ${opt.text}
+            ${extra}
+          </div>`;
+      });
+    }
+  } else if (qType === 'order') {
+    html += `<div id="orderBody"></div>`;
+  } else if (qType === 'categorize') {
+    html += `<div id="catBody"></div>`;
+  } else if (qType === 'table') {
+    html += `<div id="tableBody"></div>`;
+  }
 
   // Clinical pearl (shown after answering)
   if (state.answered && q.clinical_pearl) {
@@ -3627,9 +3694,24 @@ function renderScenario() {
       </div>`;
   }
 
+  // Explanation for non-option types
+  if (state.answered && q.explanation && (qType === 'order' || qType === 'categorize' || qType === 'table')) {
+    html += `<div class="explanation">${q.explanation}${q.protocol_ref ? ` <span class="ref">(${cleanProtocolRef(q.protocol_ref)})</span>` : ''}</div>`;
+  }
+
   // Button
   if (!state.answered) {
-    const disabled = state.selectedOptions.size === 0 ? 'disabled' : '';
+    let canSubmit = false;
+    if (qType === 'mc' || qType === 'graphical' || qType === 'mr') {
+      canSubmit = state.selectedOptions.size > 0;
+    } else if (qType === 'order') {
+      canSubmit = true; // always can submit an ordering
+    } else if (qType === 'categorize') {
+      canSubmit = state.userState.assignments && state.userState.assignments.every(a => a >= 0);
+    } else if (qType === 'table') {
+      canSubmit = state.userState.cells && state.userState.cells.every(row => row.some(c => c));
+    }
+    const disabled = canSubmit ? '' : 'disabled';
     html += `<button class="btn btn-primary" onclick="submitAnswer()" ${disabled}>Submit Answer</button>`;
   } else {
     const isLast = state.questionIndex + 1 >= questions.length;
@@ -3638,7 +3720,126 @@ function renderScenario() {
   }
 
   app.innerHTML = `<div class="fade-in">${html}</div>`;
+
+  // Post-render for special question types
+  if (qType === 'order') renderOrderBody(q);
+  if (qType === 'categorize') renderCatBody(q);
+  if (qType === 'table') renderTableBody(q);
 }
+
+function renderOrderBody(q) {
+  const body = document.getElementById('orderBody');
+  if (!body) return;
+  body.innerHTML = '';
+  const ol = document.createElement('div'); ol.className = 'order-list';
+  state.userState.order.forEach((origIdx, pos) => {
+    const d = document.createElement('div'); d.className = 'order-item';
+    d.innerHTML = `<div class="arrows"><button onclick="moveOrder(${pos},-1)">▲</button><button onclick="moveOrder(${pos},1)">▼</button></div><div class="order-text">${q.items[origIdx]}</div>`;
+    if (state.answered) {
+      const correctOrigIdx = q.correctOrder[pos];
+      d.classList.add(origIdx === correctOrigIdx ? 'correct-show' : 'wrong-show');
+      d.querySelectorAll('.arrows button').forEach(b => b.disabled = true);
+    }
+    ol.appendChild(d);
+  });
+  body.appendChild(ol);
+  if (state.answered) {
+    const correctDiv = document.createElement('div');
+    correctDiv.style.cssText = 'margin-top:12px;font-size:.85em;color:#34c759';
+    correctDiv.innerHTML = '<strong>Correct order:</strong> ' + q.correctOrder.map(i => q.items[i]).join(' → ');
+    body.appendChild(correctDiv);
+  }
+}
+
+window.moveOrder = function(pos, dir) {
+  if (state.answered) return;
+  const np = pos + dir;
+  if (np < 0 || np >= state.userState.order.length) return;
+  [state.userState.order[pos], state.userState.order[np]] = [state.userState.order[np], state.userState.order[pos]];
+  renderOrderBody(getFilteredQuestions()[state.questionIndex]);
+};
+
+function renderCatBody(q) {
+  const body = document.getElementById('catBody');
+  if (!body) return;
+  body.innerHTML = '';
+  const chips = document.createElement('div'); chips.className = 'cat-items';
+  q.items.forEach((item, i) => {
+    const c = document.createElement('div');
+    c.className = 'cat-chip' + (state.userState.assignments[i] >= 0 ? ' placed' : '') + (state.userState.pickedItem === i ? ' picked' : '');
+    c.textContent = item;
+    c.onclick = () => {
+      if (state.answered) return;
+      if (state.userState.assignments[i] >= 0) { state.userState.assignments[i] = -1; state.userState.pickedItem = -1; renderCatBody(q); return; }
+      state.userState.pickedItem = i; renderCatBody(q);
+    };
+    chips.appendChild(c);
+  });
+  body.appendChild(chips);
+
+  const buckets = document.createElement('div'); buckets.className = 'cat-buckets';
+  q.categories.forEach((cat, ci) => {
+    const b = document.createElement('div'); b.className = 'cat-bucket' + (state.userState.pickedItem >= 0 ? ' highlight' : '');
+    b.innerHTML = `<div class="cat-bucket-title">${cat}</div><div class="cat-bucket-items"></div>`;
+    const itemsDiv = b.querySelector('.cat-bucket-items');
+    state.userState.assignments.forEach((a, ii) => {
+      if (a === ci) {
+        const pc = document.createElement('div'); pc.className = 'placed-chip'; pc.textContent = q.items[ii];
+        if (state.answered) { pc.style.background = q.correctCategories[ii] === ci ? 'rgba(52,199,89,.3)' : 'rgba(217,83,79,.3)'; }
+        else { pc.onclick = (e) => { e.stopPropagation(); state.userState.assignments[ii] = -1; renderCatBody(q); }; }
+        itemsDiv.appendChild(pc);
+      }
+    });
+    b.onclick = (e) => {
+      if (state.answered || e.target.classList.contains('placed-chip')) return;
+      if (state.userState.pickedItem >= 0) { state.userState.assignments[state.userState.pickedItem] = ci; state.userState.pickedItem = -1; renderScenario(); }
+    };
+    buckets.appendChild(b);
+  });
+  body.appendChild(buckets);
+}
+
+function renderTableBody(q) {
+  const body = document.getElementById('tableBody');
+  if (!body) return;
+  body.innerHTML = '';
+  const t = document.createElement('table'); t.className = 'q-table';
+  const thead = document.createElement('thead');
+  let hr = '<tr><th></th>'; q.columns.forEach(c => hr += `<th>${c}</th>`); hr += '</tr>';
+  thead.innerHTML = hr; t.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  q.rows.forEach((r, ri) => {
+    const tr = document.createElement('tr');
+    let rowHtml = `<td>${r}</td>`;
+    q.columns.forEach((_, ci) => {
+      const on = state.userState.cells[ri][ci];
+      let cls = 'cell-btn' + (on ? ' on' : '');
+      if (state.answered) {
+        if (q.correctCells[ri][ci] && on) cls += ' correct-show';
+        else if (q.correctCells[ri][ci] && !on) cls += ' correct-show';
+        else if (!q.correctCells[ri][ci] && on) cls += ' wrong-show';
+      }
+      rowHtml += `<td><button class="${cls}" onclick="toggleCell(${ri},${ci})">${on ? '✓' : ''}</button></td>`;
+    });
+    tr.innerHTML = rowHtml; tbody.appendChild(tr);
+  });
+  t.appendChild(tbody);
+  const wrap = document.createElement('div'); wrap.className = 'table-scroll'; wrap.appendChild(t); body.appendChild(wrap);
+}
+
+window.toggleCell = function(ri, ci) {
+  if (state.answered) return;
+  const q = getFilteredQuestions()[state.questionIndex];
+  // One selection per row
+  q.columns.forEach((_, c) => { state.userState.cells[ri][c] = 0; });
+  state.userState.cells[ri][ci] = 1;
+  renderTableBody(q);
+  // Re-check submit button state
+  const btn = document.querySelector('.btn-primary');
+  if (btn && btn.textContent.includes('Submit')) {
+    btn.disabled = !state.userState.cells.every(row => row.some(c => c));
+  }
+};
 
 function selectOption(i) {
   if (state.answered) return;
@@ -3653,31 +3854,60 @@ function selectOption(i) {
 }
 
 function submitAnswer() {
-  if (state.selectedOptions.size === 0) return;
-  state.answered = true;
-  
   const q = getFilteredQuestions()[state.questionIndex];
-  const correctIndices = new Set(q.options.map((o,i) => o.correct ? i : -1).filter(i => i >= 0));
-  const selected = state.selectedOptions;
-  
-  // Check if correct
-  let isCorrect = false;
-  if (q.multi_select) {
-    isCorrect = selected.size === correctIndices.size && [...selected].every(i => correctIndices.has(i));
-  } else {
-    isCorrect = selected.size === 1 && correctIndices.has([...selected][0]);
-  }
+  const qType = q.type || (q.multi_select ? 'mr' : 'mc');
 
-  // Check if any selected option is a critical fail
-  const hasCriticalFail = [...selected].some(i => q.options[i].critical === true);
+  let isCorrect = false;
+  let hasCriticalFail = false;
+  let selectedText = [];
+  let correctText = [];
+  let protocol = '';
+
+  if (qType === 'mc' || qType === 'graphical') {
+    if (state.selectedOptions.size === 0) return;
+    state.answered = true;
+    const correctIndices = new Set(q.options.map((o,i) => o.correct ? i : -1).filter(i => i >= 0));
+    isCorrect = state.selectedOptions.size === 1 && correctIndices.has([...state.selectedOptions][0]);
+    hasCriticalFail = [...state.selectedOptions].some(i => q.options[i].critical === true);
+    selectedText = [...state.selectedOptions].map(i => q.options[i].text);
+    correctText = q.options.filter(o => o.correct).map(o => o.text);
+    protocol = q.options.find(o => o.correct)?.protocol_ref || '';
+  } else if (qType === 'mr') {
+    if (state.selectedOptions.size === 0) return;
+    state.answered = true;
+    const correctIndices = new Set(q.options.map((o,i) => o.correct ? i : -1).filter(i => i >= 0));
+    isCorrect = state.selectedOptions.size === correctIndices.size && [...state.selectedOptions].every(i => correctIndices.has(i));
+    hasCriticalFail = [...state.selectedOptions].some(i => q.options[i].critical === true);
+    selectedText = [...state.selectedOptions].map(i => q.options[i].text);
+    correctText = q.options.filter(o => o.correct).map(o => o.text);
+    protocol = q.options.find(o => o.correct)?.protocol_ref || '';
+  } else if (qType === 'order') {
+    state.answered = true;
+    isCorrect = state.userState.order.every((origIdx, pos) => origIdx === q.correctOrder[pos]);
+    selectedText = [state.userState.order.map(i => q.items[i]).join(' → ')];
+    correctText = [q.correctOrder.map(i => q.items[i]).join(' → ')];
+    protocol = q.protocol_ref || '';
+  } else if (qType === 'categorize') {
+    state.answered = true;
+    isCorrect = state.userState.assignments.every((a, i) => a === q.correctCategories[i]);
+    selectedText = [q.items.map((item, i) => `${item} → ${q.categories[state.userState.assignments[i]] || '?'}`).join(', ')];
+    correctText = [q.items.map((item, i) => `${item} → ${q.categories[q.correctCategories[i]]}`).join(', ')];
+    protocol = q.protocol_ref || '';
+  } else if (qType === 'table') {
+    state.answered = true;
+    isCorrect = state.userState.cells.every((row, ri) => row.every((c, ci) => c === q.correctCells[ri][ci]));
+    selectedText = [q.rows.map((r, ri) => `${r}: ${q.columns.filter((_, ci) => state.userState.cells[ri][ci]).join(', ') || 'none'}`).join('; ')];
+    correctText = [q.rows.map((r, ri) => `${r}: ${q.columns.filter((_, ci) => q.correctCells[ri][ci]).join(', ')}`).join('; ')];
+    protocol = q.protocol_ref || '';
+  }
 
   state.answers.push({
     question: q.prompt,
     phase: q.phase,
     correct: isCorrect,
-    selected: [...selected].map(i => q.options[i].text),
-    correctAnswer: q.options.filter(o => o.correct).map(o => o.text),
-    protocol: q.options.find(o => o.correct)?.protocol_ref || '',
+    selected: selectedText,
+    correctAnswer: correctText,
+    protocol: protocol,
     criticalFail: hasCriticalFail
   });
 
@@ -3688,6 +3918,7 @@ function nextQuestion() {
   state.questionIndex++;
   state.answered = false;
   state.selectedOptions = new Set();
+  state.userState = {};
   render();
 }
 
