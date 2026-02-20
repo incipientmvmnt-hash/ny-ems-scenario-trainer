@@ -1203,7 +1203,7 @@ const SCENARIOS = [
         phase: "treatment",
         prompt: "At the EMT level, what additional treatment is indicated for the persistent wheezing?",
         multi_select: false,
-        level_filter: "EMT-AEMT-CC-P",
+        level_filter: "EMT",
         narrative: "Second epinephrine dose given. BP has come up to 96/60. Stridor is improving but bilateral wheezing persists.",
         vitals_update: { hr: 112, bp: "96/60", rr: 24, spo2: 94 },
         clinical_pearl: "At the EMT level, albuterol can be combined with ipratropium (Atrovent) for enhanced bronchodilation in anaphylaxis with refractory wheezing.",
@@ -2026,7 +2026,7 @@ const SCENARIOS = [
         phase: "assessment",
         prompt: "Blood glucose reads 28 mg/dL. The patient cannot follow commands or swallow on command. At the EMT level, what is the correct action per NY protocol?",
         multi_select: false,
-        level_filter: "EMT-AEMT-CC-P",
+        level_filter: "EMT",
         narrative: "You confirm BG of 28 mg/dL. The patient opens eyes to voice but cannot follow commands and is unable to swallow reliably.",
         clinical_pearl: "NY Hypoglycemia protocol is clear: if glucose is below 60 mg/dL and the patient CANNOT swallow on command, do NOT administer oral glucose. Begin transport immediately for EMTs. ALS providers can administer IV dextrose or IM glucagon.",
         options: [
@@ -3585,7 +3585,7 @@ const SCENARIOS = [
         phase: "treatment",
         prompt: "The patient has his own prescribed nitroglycerin tablets. His BP is 148/92. Per NY protocol, what is the correct approach to nitroglycerin administration at the EMT level?",
         type: "mc",
-        level_filter: "EMT-AEMT-CC-P",
+        level_filter: "EMT",
         narrative: "You have administered aspirin 324mg (4 x 81mg chewed). The patient asks if he can take his nitroglycerin.",
         options: [
           { text: "Assist the patient with his own NTG, up to 3 doses 5 minutes apart, as long as SBP remains above 120", correct: true, critical: false, explanation: "Correct. Per NY protocol at the EMT level, you may assist the patient with their own prescribed NTG up to 3 doses, 5 minutes apart, provided SBP remains above 120 mmHg.", protocol_ref: "als_cardiac_related_problem..." },
