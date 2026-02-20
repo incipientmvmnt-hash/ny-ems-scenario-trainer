@@ -3811,7 +3811,7 @@ function renderSelect() {
         <div class="card" onclick="startScenario('${s.id}')" style="margin-bottom:8px">
           <div class="scenario-item">
             <div>
-              <div class="title">${s.title}</div>
+              <div class="title">${s.dispatch}</div>
               <div class="tags" style="margin-top:6px">
                 <span class="tag ${diffClass}">${s.difficulty}</span>
               </div>
@@ -3899,7 +3899,7 @@ function renderScenario() {
   let html = `
     <button class="back-btn" onclick="state.screen='select';render()">Exit Scenario</button>
     ${progressHtml}
-    <div style="margin-bottom:6px"><span style="color:#8b92a8;font-size:.85em">${s.title}</span></div>
+    <div style="margin-bottom:6px"></div>
   `;
 
   // Show dispatch/scene on first question
