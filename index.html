@@ -440,7 +440,7 @@ const SCENARIOS = [
         phase: "treatment",
         prompt: "At the CC level, what sedation medication is available as a standing order for agitated patients?",
         multi_select: false,
-        level_filter: "CC-P",
+        level_filter: "CC",
         narrative: "Consider the scenario from the CC provider perspective, where ketamine is not available.",
         clinical_pearl: "CC providers have midazolam (Versed) up to 5 mg IM or IV, with repeat dosing up to a total of 10 mg. Paramedics have ketamine in addition to midazolam.",
         options: [
@@ -2677,7 +2677,7 @@ const SCENARIOS = [
         phase: "treatment",
         prompt: "During CPR, you visualize a grape lodged in the hypopharynx. At the CC level, what airway tool is specifically indicated for foreign body removal under direct visualization?",
         multi_select: false,
-        level_filter: "CC-P",
+        level_filter: "CC",
         narrative: "After 30 seconds of compressions, you open the airway and see the grape visible at the back of the throat. You have a full ALS airway kit available.",
         options: [
           { text: "Age-appropriate laryngoscope and Magill forceps to grasp and remove the foreign body under direct visualization as specified per protocol", correct: true, critical: false, explanation: "Per NY Airway Management protocol, CC level is authorized to use age-appropriate laryngoscope and Magill forceps in cases of obstructed airway for foreign body removal.", protocol_ref: "als_oxygen_administration_and_airway_management" },
@@ -3186,7 +3186,7 @@ const SCENARIOS = [
         phase: "treatment",
         prompt: "At the CC level, what additional medication is indicated for this patient?",
         multi_select: false,
-        level_filter: "CC-P",
+        level_filter: "CC",
         narrative: "The child has received two doses of IM epinephrine and one albuterol nebulizer. Stridor is improving but urticaria persists. BP is now 86/52.",
         vitals_update: { hr: 132, bp: "86/52", rr: 28, spo2: 93, gcs: 15 },
         clinical_pearl: "Diphenhydramine at the CC level is dosed at 1 mg/kg IM (max 50 mg) for pediatric anaphylaxis. At the Paramedic level, it can also be given IV and additional interventions include NS 20 mL/kg bolus and dexamethasone.",
