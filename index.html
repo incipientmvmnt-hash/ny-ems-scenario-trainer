@@ -191,6 +191,16 @@ body.light-mode .scenario-item .title{color:#1a1a2e}
 body.light-mode .critical-fails-warning{background:rgba(183,28,28,.1);border-color:#b71c1c;color:#d32f2f}
 body.light-mode .score-tier{color:inherit}
 /* Level cards: keep text colors, adjust bg on selected */
+.muted-label{color:#8b92a8}
+.hero-title{font-size:1.8em;margin:0 0 6px;background:linear-gradient(135deg,#fff,#8b92a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{color:#8b92a8;font-size:.9em;margin:0}
+.stat-divider{width:1px;background:#1e2440}
+.home-section{background:#141929;border-radius:16px;padding:20px;margin-bottom:24px}
+body.light-mode .muted-label{color:#6b7280}
+body.light-mode .hero-title{background:linear-gradient(135deg,#1a1a2e,#6b7280);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+body.light-mode .hero-sub{color:#6b7280}
+body.light-mode .stat-divider{background:rgba(0,0,0,.12)}
+body.light-mode .home-section{background:rgba(255,255,255,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 8px rgba(0,0,0,.06)}
 body.light-mode .level-card{background:rgba(255,255,255,.5);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-color:rgba(0,0,0,.08)}
 body.light-mode .level-card[data-level="CFR"]{color:#808080;border-color:#a0a0a0}
 body.light-mode .level-card[data-level="CFR"].selected{background:rgba(160,160,160,.12)}
@@ -3818,29 +3828,29 @@ function renderHome() {
   app.innerHTML = `
     <div style="text-align:center;padding:30px 0 20px">
       
-      <h1 style="font-size:1.8em;margin:0 0 6px;background:linear-gradient(135deg,#fff,#8b92a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NY EMS Scenario Trainer</h1>
-      <p style="color:#8b92a8;font-size:.9em;margin:0">New York State Collaborative Protocols · v25.1</p>
+      <h1 class="hero-title">NY EMS Scenario Trainer</h1>
+      <p class="hero-sub">New York State Collaborative Protocols · v25.1</p>
     </div>
 
     <div style="display:flex;justify-content:center;gap:16px;margin:20px 0 28px">
       <div style="text-align:center">
         <div style="font-size:1.6em;font-weight:700;color:#d9534f">${scenarioCount}</div>
-        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Scenarios</div>
+        <div class="muted-label" style="font-size:.7em;text-transform:uppercase;letter-spacing:.5px">Scenarios</div>
       </div>
-      <div style="width:1px;background:#1e2440"></div>
+      <div class="stat-divider"></div>
       <div style="text-align:center">
         <div style="font-size:1.6em;font-weight:700;color:#4a9eff">5</div>
-        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Provider Levels</div>
+        <div class="muted-label" style="font-size:.7em;text-transform:uppercase;letter-spacing:.5px">Provider Levels</div>
       </div>
-      <div style="width:1px;background:#1e2440"></div>
+      <div class="stat-divider"></div>
       <div style="text-align:center">
         <div style="font-size:1.6em;font-weight:700;color:#34c759">4</div>
-        <div style="font-size:.7em;color:#8b92a8;text-transform:uppercase;letter-spacing:.5px">Categories</div>
+        <div class="muted-label" style="font-size:.7em;text-transform:uppercase;letter-spacing:.5px">Categories</div>
       </div>
     </div>
 
-    <div style="background:#141929;border-radius:16px;padding:20px;margin-bottom:24px">
-      <p style="color:#8b92a8;font-size:.8em;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;font-weight:600">Select Your Certification Level</p>
+    <div class="home-section">
+      <p class="muted-label" style="font-size:.8em;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;font-weight:600">Select Your Certification Level</p>
       
       <div class="card level-card" data-level="CFR" onclick="selectLevel('CFR')" style="display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;margin-bottom:8px">
         <div style="display:none"></div>
@@ -3864,7 +3874,7 @@ function renderHome() {
       </div>
     </div>
 
-    <p style="text-align:center;color:#555;font-size:.75em;margin-top:16px">Scenarios based on NY Collaborative Protocols v25.1<br>For training purposes only — not a substitute for protocol review</p>
+    <p class="muted-label" style="text-align:center;font-size:.75em;margin-top:16px">Scenarios based on NY Collaborative Protocols v25.1<br>For training purposes only — not a substitute for protocol review</p>
   `;
 }
 
@@ -3911,7 +3921,7 @@ function renderSelect() {
                 <span class="tag ${diffClass}">${s.difficulty}</span>
               </div>
             </div>
-            <span style="color:#8b92a8">›</span>
+            <span class="muted-label">›</span>
           </div>
         </div>`;
     });
@@ -4011,7 +4021,7 @@ function renderScenario() {
       <div class="narrative">
         <div class="label">👤 Patient</div>
         ${s.patient.age}yo ${s.patient.sex === 'M' ? 'male' : 'female'} — ${s.patient.cc}<br>
-        <span style="color:#8b92a8;font-size:.9em">PMH: ${s.history.pmh} | Meds: ${s.history.meds} | Allergies: ${s.history.allergies}</span>
+        <span class="muted-label" style="font-size:.9em">PMH: ${s.history.pmh} | Meds: ${s.history.meds} | Allergies: ${s.history.allergies}</span>
       </div>
       <div class="narrative">
         <div class="label">🔍 Presentation</div>
@@ -4390,7 +4400,7 @@ function renderDebrief() {
 
   let html = `
     <h1 style="font-size:1.3em;text-align:center">📊 Scenario Debrief</h1>
-    <p style="text-align:center;color:#8b92a8;margin-bottom:16px">${s.title}</p>
+    <p class="muted-label" style="text-align:center;margin-bottom:16px">${s.title}</p>
     
     <div class="score-circle ${scoreClass}">
       ${correct}/${total}
